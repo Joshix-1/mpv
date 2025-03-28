@@ -19,9 +19,18 @@
 
 #include <misc/path_utils.h>
 #include <player/core.h>
+#include <stdio.h>
+#include <string.h>
+
+#define PREFIX_LEN  6
+const char PREFIX[PREFIX_LEN + 1] = "watch#";
 
 static int open_mpv(stream_t *st)
 {
+    if (strncmp(st->path, PREFIX, PREFIX_LEN) != 0) {
+        return STREAM_ERROR;
+    }
+    st->path += PREFIX_LEN;
     st->demuxer = "mpv";
     return STREAM_OK;
 }
